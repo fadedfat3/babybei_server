@@ -17,7 +17,10 @@ public class HelpInfoController {
     private int limit = 10;
 
     @GetMapping(value = "helpInfo/{type}")
-    public List<HelpInfo> getInfo(@PathVariable("type") int type, @RequestParam(value = "page") int page) {
+    public List<HelpInfo> getInfo(@PathVariable("type") Integer type, @RequestParam(value = "page", required = false) Integer page) {
+        if(page == null){
+            page = 0;
+        }
         return helpInfoService.getInfo(type, limit, page * limit);
     }
 }
