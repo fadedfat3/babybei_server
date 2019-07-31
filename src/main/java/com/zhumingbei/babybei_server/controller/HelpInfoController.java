@@ -14,9 +14,10 @@ import java.util.List;
 public class HelpInfoController {
     @Autowired
     private HelpInfoService helpInfoService;
+    private int limit = 10;
 
     @GetMapping(value = "helpInfo/{type}")
-    public List<HelpInfo> getInfo(@PathVariable("type") int type, @RequestParam(value = "limit") int limit, @RequestParam(value = "offset") int offset) {
-        return helpInfoService.getInfo(type, limit, offset);
+    public List<HelpInfo> getInfo(@PathVariable("type") int type, @RequestParam(value = "page") int page) {
+        return helpInfoService.getInfo(type, limit, page * limit);
     }
 }
