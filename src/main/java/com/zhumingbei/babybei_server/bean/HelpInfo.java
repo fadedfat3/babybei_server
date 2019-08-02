@@ -37,4 +37,14 @@ public class HelpInfo {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+    @Override
+    public String toString() {
+        return "HelpInfo{" +
+                "id=" + id +
+                ", type=" + type +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                '}';
+    }
 }

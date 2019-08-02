@@ -14,4 +14,29 @@ spring:
 ## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis:
   mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+## 监控管理
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+##日志
+###帮助信息属性
+help-info:
+  page-size: 10
+logging:
+  file: app.log
+  level:
+    com:
+      zhumingbei:
+        babybei_server: INFO
+    org:
+      springframework:
+        web: ERROR
+    root: WARN
+
 
