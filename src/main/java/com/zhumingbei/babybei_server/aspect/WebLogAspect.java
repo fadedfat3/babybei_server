@@ -24,6 +24,10 @@ public class WebLogAspect {
     public void webLog() {
     }
 
+    @Pointcut("execution(public * com.zhumingbei.babybei_server.controller.HelpInfoController..*.*(..))")
+    public void log() {
+
+    }
     @Before("webLog()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
@@ -44,5 +48,6 @@ public class WebLogAspect {
         // 处理完请求，返回内容
         logger.info("RESPONSE : " + ret);
     }
+
 
 }
