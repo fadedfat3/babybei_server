@@ -5,7 +5,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://47.52.160.81:3306/vhr?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&autoConnect=true
+    url: jdbc:mysql://47.52.160.81:3306/babybei?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&autoConnect=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     test-on-borrow: false
     test-while-idle: true
