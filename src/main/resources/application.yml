@@ -1,5 +1,5 @@
 server:
-  port: 8001
+  port: 8888
 
 spring:
   datasource:
@@ -24,19 +24,21 @@ management:
     health:
       show-details: always
 
-##日志
+
 ###帮助信息属性
 help-info:
   page-size: 10
+##日志
 logging:
-  file: app.log
+  file: logs/app.log
   level:
     com:
       zhumingbei:
         babybei_server: INFO
     org:
       springframework:
-        web: ERROR
+        web: INFO
+        security: INFO
     root: WARN
 
 
