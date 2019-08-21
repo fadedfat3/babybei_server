@@ -1,6 +1,6 @@
-package com.zhumingbei.babybei_server.service;
+package com.zhumingbei.babybei_server.service.impl;
 
-import com.zhumingbei.babybei_server.bean.Users;
+import com.zhumingbei.babybei_server.entity.Users;
 import com.zhumingbei.babybei_server.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

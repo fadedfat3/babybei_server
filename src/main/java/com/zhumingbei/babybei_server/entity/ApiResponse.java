@@ -1,4 +1,4 @@
-package com.zhumingbei.babybei_server.bean;
+package com.zhumingbei.babybei_server.entity;
 
 import com.zhumingbei.babybei_server.constant.StatusCodeConstant;
 import com.zhumingbei.babybei_server.exception.BaseException;

@@ -1,6 +1,6 @@
 package com.zhumingbei.babybei_server.mapper;
 
-import com.zhumingbei.babybei_server.bean.Users;
+import com.zhumingbei.babybei_server.entity.Users;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

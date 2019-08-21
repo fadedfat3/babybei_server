@@ -1,7 +1,7 @@
-package com.zhumingbei.babybei_server.service;
+package com.zhumingbei.babybei_server.service.impl;
 
-import com.zhumingbei.babybei_server.bean.Permissions;
-import com.zhumingbei.babybei_server.bean.Users;
+import com.zhumingbei.babybei_server.entity.Permissions;
+import com.zhumingbei.babybei_server.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

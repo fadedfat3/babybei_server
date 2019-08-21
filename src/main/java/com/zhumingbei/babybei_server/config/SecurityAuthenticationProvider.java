@@ -1,7 +1,7 @@
 package com.zhumingbei.babybei_server.config;
 
-import com.zhumingbei.babybei_server.bean.Users;
-import com.zhumingbei.babybei_server.service.UsersDetailsService;
+import com.zhumingbei.babybei_server.entity.Users;
+import com.zhumingbei.babybei_server.service.impl.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

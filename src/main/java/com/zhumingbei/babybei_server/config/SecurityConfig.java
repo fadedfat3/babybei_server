@@ -1,6 +1,6 @@
 package com.zhumingbei.babybei_server.config;
 
-import com.zhumingbei.babybei_server.service.UsersDetailsService;
+import com.zhumingbei.babybei_server.service.impl.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,16 +21,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // AuthenticationProvider provider;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
+                .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .permitAll();
-
-
     }
 
     @Override

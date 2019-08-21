@@ -1,4 +1,4 @@
-package com.zhumingbei.babybei_server.bean;
+package com.zhumingbei.babybei_server.entity;
 
 import java.io.Serializable;
 import java.util.List;

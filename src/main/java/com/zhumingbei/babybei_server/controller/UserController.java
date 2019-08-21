@@ -1,7 +1,7 @@
 package com.zhumingbei.babybei_server.controller;
 
-import com.zhumingbei.babybei_server.bean.Users;
-import com.zhumingbei.babybei_server.service.UserService;
+import com.zhumingbei.babybei_server.entity.Users;
+import com.zhumingbei.babybei_server.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
