@@ -34,4 +34,36 @@ public class ApiResponse {
     public ApiResponse(BaseException e) {
         this(e, null);
     }
+
+    public static ApiResponse of(int code, String msg, Object data) {
+        return new ApiResponse(code, msg, data);
+    }
+
+    public static ApiResponse of(int code, String msg) {
+        return of(code, msg, null);
+    }
+
+    public static ApiResponse of(StatusCode statusCode, Object data) {
+        return new ApiResponse(statusCode, data);
+    }
+
+    public static ApiResponse ofSuccess(String msg, Object data) {
+        return of(200, msg, data);
+    }
+
+    public static ApiResponse ofSuccess(Object data) {
+        return of(StatusCode.OK, data);
+    }
+
+    public static ApiResponse ofSuccess() {
+        return ofSuccess(null);
+    }
+
+    public static ApiResponse ofSuccess(String msg) {
+        return ofSuccess(msg, null);
+    }
+
+    public static <T extends BaseException> ApiResponse ofException(T t) {
+        return of(t.getCode(), t.getMsg(), t.getData());
+    }
 }

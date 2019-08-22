@@ -2,7 +2,7 @@ package com.zhumingbei.babybei_server.entity;
 
 import java.io.Serializable;
 
-public class Permissions implements Serializable {
+public class Permission implements Serializable {
     private Long id;
     private String name;
     private String code;

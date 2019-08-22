@@ -3,11 +3,11 @@ package com.zhumingbei.babybei_server.entity;
 import java.io.Serializable;
 import java.util.List;
 
-public class Roles implements Serializable {
+public class Role implements Serializable {
     private Long id;
     private String roleName;
     private String roleCode;
-    private List<Permissions> permissionList;
+    private List<Permission> permissionList;
 
     public Long getId() {
         return id;
@@ -33,11 +33,11 @@ public class Roles implements Serializable {
         this.roleCode = roleCode;
     }
 
-    public List<Permissions> getPermissionList() {
+    public List<Permission> getPermissionList() {
         return permissionList;
     }
 
-    public void setPermissionList(List<Permissions> permissionList) {
+    public void setPermissionList(List<Permission> permissionList) {
         this.permissionList = permissionList;
     }
 }

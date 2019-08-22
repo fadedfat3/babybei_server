@@ -9,16 +9,27 @@ import lombok.EqualsAndHashCode;
 public class BaseException extends RuntimeException {
     private Integer code;
     private String msg;
+    private Object data;
 
-    public BaseException(int code, String msg) {
+    public BaseException(int code, String msg, Object data) {
         super(msg);
         this.code = code;
         this.msg = msg;
+        this.data = data;
     }
 
-    public BaseException(StatusCode statusCodeConstant) {
-        super(statusCodeConstant.getMsg());
-        this.code = statusCodeConstant.getCode();
-        this.msg = statusCodeConstant.getMsg();
+    public BaseException(StatusCode statusCode, Object data) {
+        super(statusCode.getMsg());
+        this.code = statusCode.getCode();
+        this.msg = statusCode.getMsg();
+        this.data = data;
+    }
+
+    public BaseException(int code, String msg) {
+        this(code, msg, null);
+    }
+
+    public BaseException(StatusCode statusCode) {
+        this(statusCode, null);
     }
 }

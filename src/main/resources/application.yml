@@ -31,6 +31,24 @@ spring:
         size: 20
       thread-name-prefix: Job-Thread-
 
+  redis:
+    host: localhost
+    port: 6379
+    # 连接超时时间（记得添加单位，Duration）
+    timeout: 10000ms
+    # Redis默认情况下有16个分片，这里配置具体使用的分片
+    # database: 0
+    lettuce:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制） 默认 8
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+        max-wait: -1ms
+        # 连接池中的最大空闲连接 默认 8
+        max-idle: 8
+        # 连接池中的最小空闲连接 默认 0
+        min-idle: 0
+
 ## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
 mybatis:
   mapper-locations: classpath:mapping/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
@@ -47,7 +65,14 @@ management:
 
 ###帮助信息属性
 help-info:
-  page-size: 10
+  page-size:
+
+##jwt
+jwt:
+  config:
+    key: fadedfate
+    ttl: 600000  #ms
+    remember: 604800000 #记住我，7天有效期
 ##日志
 logging:
   file: logs/app.log

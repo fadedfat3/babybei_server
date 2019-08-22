@@ -3,13 +3,13 @@ package com.zhumingbei.babybei_server.entity;
 import java.io.Serializable;
 import java.util.List;
 
-public class Users implements Serializable {
+public class User implements Serializable {
     private Long id;
     private String username;
     private String password;
     private Integer lastPasswordChanged;
-    private List<Roles> roles;
-    private List<Permissions> permissions;
+    private List<Role> roles;
+    private List<Permission> permissions;
     public Long getId() {
         return id;
     }
@@ -42,25 +42,25 @@ public class Users implements Serializable {
         this.lastPasswordChanged = lastPasswordChanged;
     }
 
-    public List<Roles> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Roles> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
-    public List<Permissions> getPermissions() {
+    public List<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<Permissions> permissions) {
+    public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
 
     @Override
     public String toString() {
-        return "Users{" +
+        return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

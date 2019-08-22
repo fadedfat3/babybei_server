@@ -1,13 +1,15 @@
 package com.zhumingbei.babybei_server.mapper;
 
-import com.zhumingbei.babybei_server.entity.Users;
+import com.zhumingbei.babybei_server.entity.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface UserMapper {
-    Users getUserByName(String username);
+    User getUserByName(String username);
 
-    List<Users> getList();
+    List<User> getList();
+
+    void insert(String username, String password);
 }
