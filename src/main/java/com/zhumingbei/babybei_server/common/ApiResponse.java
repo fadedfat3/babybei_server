@@ -1,6 +1,5 @@
-package com.zhumingbei.babybei_server.entity;
+package com.zhumingbei.babybei_server.common;
 
-import com.zhumingbei.babybei_server.constant.StatusCodeConstant;
 import com.zhumingbei.babybei_server.exception.BaseException;
 import lombok.Data;
 
@@ -16,11 +15,11 @@ public class ApiResponse {
         this.data = data;
     }
 
-    public ApiResponse(StatusCodeConstant statusCodeConstant, Object data) {
+    public ApiResponse(StatusCode statusCodeConstant, Object data) {
         this(statusCodeConstant.getCode(), statusCodeConstant.getMsg(), data);
     }
 
-    public ApiResponse(StatusCodeConstant statusCodeConstant) {
+    public ApiResponse(StatusCode statusCodeConstant) {
         this(statusCodeConstant, null);
     }
 

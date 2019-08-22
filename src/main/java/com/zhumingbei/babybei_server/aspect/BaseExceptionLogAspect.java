@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  @author: fadedfate
  */
 public class BaseExceptionLogAspect {
-    @Pointcut("execution(public * com.zhumingbei.babybei_server.handler..*.*(..))")
+    @Pointcut("execution(public * com.zhumingbei.babybei_server.exception.handler..*.*(..))")
     public void exceptionLog() {
 
     }

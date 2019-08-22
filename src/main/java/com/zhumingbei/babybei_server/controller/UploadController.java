@@ -1,6 +1,6 @@
 package com.zhumingbei.babybei_server.controller;
 
-import com.zhumingbei.babybei_server.entity.ApiResponse;
+import com.zhumingbei.babybei_server.common.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

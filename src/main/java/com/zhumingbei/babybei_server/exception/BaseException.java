@@ -1,6 +1,6 @@
 package com.zhumingbei.babybei_server.exception;
 
-import com.zhumingbei.babybei_server.constant.StatusCodeConstant;
+import com.zhumingbei.babybei_server.common.StatusCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,7 +16,7 @@ public class BaseException extends RuntimeException {
         this.msg = msg;
     }
 
-    public BaseException(StatusCodeConstant statusCodeConstant) {
+    public BaseException(StatusCode statusCodeConstant) {
         super(statusCodeConstant.getMsg());
         this.code = statusCodeConstant.getCode();
         this.msg = statusCodeConstant.getMsg();
