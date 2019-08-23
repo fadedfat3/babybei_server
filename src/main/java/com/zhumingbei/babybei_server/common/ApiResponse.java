@@ -47,6 +47,9 @@ public class ApiResponse {
         return new ApiResponse(statusCode, data);
     }
 
+    public static ApiResponse of(StatusCode statusCode) {
+        return of(statusCode, null);
+    }
     public static ApiResponse ofSuccess(String msg, Object data) {
         return of(200, msg, data);
     }
