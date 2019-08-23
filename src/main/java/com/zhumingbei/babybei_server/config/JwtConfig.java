@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class JwtConfig {
     private String key;
+    private String type = "Bearer";
     private Long ttl;
     private Long remember;
 }

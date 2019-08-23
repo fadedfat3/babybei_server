@@ -65,7 +65,17 @@ management:
 
 ###帮助信息属性
 help-info:
-  page-size:
+  page-size: 10
+
+url:
+  ignore:
+    get:
+      - "/api/auth/login"
+    post:
+      - "/api/auth/login"
+      - "/login"
+    pattern:
+      - "/test/*"
 
 ##jwt
 jwt:
