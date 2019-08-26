@@ -67,6 +67,11 @@ public enum StatusCode {
     TOKEN_EXPIRED(5002, "token 已过期，请重新登录！"),
 
     /**
+     * 当前用户已在别处登录，请尝试更改密码或重新登录！
+     */
+    TOKEN_OUT_OF_CTRL(5003, "当前用户已在别处登录，请尝试更改密码或重新登录！"),
+
+    /**
      * token 解析失败，请尝试重新登录！
      */
     TOKEN_PARSE_ERROR(5002, "token 解析失败，请尝试重新登录！");

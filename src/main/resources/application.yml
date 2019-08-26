@@ -81,8 +81,9 @@ url:
 jwt:
   config:
     key: fadedfate
-    ttl: 600000  #ms
-    remember: 604800000 #记住我，7天有效期
+    ttl:   86400 #s, 1 day
+    remember: 604800 #记住我，7天有效期
+    redis-key-prefix: jwt.
 ##日志
 logging:
   file: logs/app.log

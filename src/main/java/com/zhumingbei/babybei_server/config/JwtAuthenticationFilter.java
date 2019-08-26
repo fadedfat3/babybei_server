@@ -3,10 +3,10 @@ package com.zhumingbei.babybei_server.config;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.zhumingbei.babybei_server.common.Jwt;
 import com.zhumingbei.babybei_server.common.StatusCode;
 import com.zhumingbei.babybei_server.exception.BaseException;
 import com.zhumingbei.babybei_server.service.impl.UsersDetailsServiceImpl;
+import com.zhumingbei.babybei_server.util.JwtUtil;
 import com.zhumingbei.babybei_server.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UsersDetailsServiceImpl userDetailsService;
 
     @Autowired
-    private Jwt jwt;
+    private JwtUtil jwtUtil;
 
     @Autowired
     private UrlIgnoreConfig urlIgnoreConfig;
@@ -52,11 +52,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String jwtStr = jwt.getJwtFromRequest(request);
+        String jwtStr = jwtUtil.getJwtFromRequest(request);
 
         if (StrUtil.isNotBlank(jwtStr)) {
             try {
-                String username = jwt.getUsernameFromJWT(jwtStr);
+                String username = jwtUtil.getUsernameFromJWT(jwtStr);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

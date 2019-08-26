@@ -16,4 +16,5 @@ public class JwtConfig {
     private String type = "Bearer";
     private Long ttl;
     private Long remember;
+    private String redisKeyPrefix;
 }

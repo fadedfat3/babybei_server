@@ -1,18 +1,20 @@
-package com.zhumingbei.babybei_server.common;
+package com.zhumingbei.babybei_server.util;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.zhumingbei.babybei_server.common.StatusCode;
+import com.zhumingbei.babybei_server.common.UserPrincipal;
 import com.zhumingbei.babybei_server.config.JwtConfig;
 import com.zhumingbei.babybei_server.exception.SecurityException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author fadedfate
@@ -20,12 +22,13 @@ import java.util.Date;
  */
 @Component
 @Slf4j
-public class Jwt {
+public class JwtUtil {
     @Autowired
     private JwtConfig jwtConfig;
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
+    private Long ttl;
     public String createJWT(UserPrincipal user, Boolean rememberMe) {
         Date now = new Date();
         JwtBuilder builder = Jwts.builder()
@@ -36,12 +39,10 @@ public class Jwt {
                 .claim("roles", user.getRoleList())
                 .claim("authorities", user.getAuthorities());
         // 设置过期时间
-        Long ttl = rememberMe ? jwtConfig.getRemember() : jwtConfig.getTtl();
-        if (ttl > 0) {
-            builder.setExpiration(DateUtil.offsetMillisecond(now, ttl.intValue()));
-        }
+        ttl = rememberMe ? jwtConfig.getRemember() : jwtConfig.getTtl();
 
         String jwt = builder.compact();
+        redisTemplate.opsForValue().set(jwtConfig.getRedisKeyPrefix() + user.getUsername(), jwt, ttl, TimeUnit.SECONDS);
         return jwt;
     }
 
@@ -56,7 +57,20 @@ public class Jwt {
                     .setSigningKey(jwtConfig.getKey())
                     .parseClaimsJws(jwt)
                     .getBody();
+            String username = claims.getSubject();
+            String key = jwtConfig.getRedisKeyPrefix() + username;
+            Long expire = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+            if (expire == null || expire < 0) {
+                throw new SecurityException(StatusCode.TOKEN_EXPIRED);
+            }
+            String redisJwt = (String) redisTemplate.opsForValue().get(key);
 
+            if (!redisJwt.equals(jwt)) {
+                log.error("jwt:{}", jwt);
+                log.error("redisJwt:{}", redisJwt);
+                throw new SecurityException(StatusCode.TOKEN_OUT_OF_CTRL);
+            }
+            refreshExpire(key, ttl);
             return claims;
         } catch (ExpiredJwtException e) {
             log.error("Token 已过期");
@@ -74,6 +88,11 @@ public class Jwt {
             log.error("Token 参数不存在");
             throw new SecurityException(StatusCode.TOKEN_PARSE_ERROR);
         }
+
+    }
+
+    public void refreshExpire(String key, Long second) {
+        redisTemplate.expire(key, second, TimeUnit.SECONDS);
     }
 
     /**
@@ -85,7 +104,7 @@ public class Jwt {
         String jwt = getJwtFromRequest(request);
         String username = getUsernameFromJWT(jwt);
         // 从redis中清除JWT
-        //stringRedisTemplate.delete(Consts.REDIS_JWT_KEY_PREFIX + username);
+        redisTemplate.delete(jwtConfig.getRedisKeyPrefix() + username);
     }
 
     /**

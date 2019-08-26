@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -71,5 +72,15 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public static UserPrincipal getUserInfo() {
+        Object userInfo = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userInfo instanceof UserPrincipal) {
+            UserPrincipal user = (UserPrincipal) userInfo;
+            user.setPassword("******");
+            return user;
+        }
+        return null;
     }
 }
