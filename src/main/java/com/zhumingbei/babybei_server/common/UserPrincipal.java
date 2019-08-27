@@ -34,9 +34,9 @@ public class UserPrincipal implements UserDetails {
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         List<Permission> permissionList = user.getPermissions();
         for (Permission permission : permissionList) {
-            simpleGrantedAuthorities.add(new SimpleGrantedAuthority(permission.getCode()));
+            simpleGrantedAuthorities.add(new SimpleGrantedAuthority(permission.getExprission()));
         }
-        return new UserPrincipal(user.getId(), user.getUsername(), user.getPassword(), user.getLastPasswordChanged(), user.getRoles(), simpleGrantedAuthorities);
+        return new UserPrincipal(user.getUserId(), user.getUsername(), user.getPassword(), user.getLastPasswordChanged(), user.getRoles(), simpleGrantedAuthorities);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class UserPrincipal implements UserDetails {
         Object userInfo = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userInfo instanceof UserPrincipal) {
             UserPrincipal user = (UserPrincipal) userInfo;
-            user.setPassword("******");
+            user.setPassword(null);
             return user;
         }
         return null;

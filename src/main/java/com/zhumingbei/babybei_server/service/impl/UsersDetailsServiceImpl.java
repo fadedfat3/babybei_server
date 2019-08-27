@@ -27,7 +27,7 @@ public class UsersDetailsServiceImpl implements UserDetailsService {
         password = new BCryptPasswordEncoder().encode(password);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (Permission permission : user.getPermissions()) {
-            authorities.add(new SimpleGrantedAuthority(permission.getCode()));
+            authorities.add(new SimpleGrantedAuthority(permission.getExprission()));
         }
         return UserPrincipal.create(user);
     }

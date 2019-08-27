@@ -40,7 +40,6 @@ public class AuthController {
 
         SecurityContextHolder.getContext()
                 .setAuthentication(authentication);
-
         String jwtStr = jwtUtil.createJWT(authentication, false);
         return ApiResponse.ofSuccess(Dict.create().set("jwt", jwtStr));
     }

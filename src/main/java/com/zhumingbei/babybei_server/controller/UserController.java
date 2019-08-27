@@ -22,18 +22,11 @@ public class UserController {
     private RedisTemplate<String, Object> redisTemplate;
 
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('UserList')")
+    @PreAuthorize("hasAuthority('admin:list:user')")
     public List<User> getUserList() {
         return userService.getUserList();
     }
 
-    @GetMapping("/{username}")
-    public User index(@PathVariable(value = "username", required = false) String username) {
-        if (username == null) {
-            username = "admin";
-        }
-        return userService.findByUsername(username);
-    }
 
     @GetMapping("/me")
     public UserPrincipal info() {

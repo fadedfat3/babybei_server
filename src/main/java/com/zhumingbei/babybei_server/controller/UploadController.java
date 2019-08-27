@@ -1,7 +1,10 @@
 package com.zhumingbei.babybei_server.controller;
 
 import com.zhumingbei.babybei_server.common.ApiResponse;
+import com.zhumingbei.babybei_server.config.UploadConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,20 +22,27 @@ import java.io.IOException;
 @Controller
 @Slf4j
 public class UploadController {
-    @PostMapping("/uploadfile")
+    @Autowired
+    private UploadConfig uploadConfig;
+    @PostMapping("/upload")
     @ResponseBody
+    @PreAuthorize("hasAuthority('admin:upload')")
     public ApiResponse fileUpload(@RequestParam("file") MultipartFile file) {
         log.info("start to upload");
         if (file.isEmpty()) {
             return new ApiResponse(400, "文件内容为空");
         }
-        String tmp = "F:/repos/github/babybei_server/uploads";
+        String tmp = uploadConfig.getPath();
+        File dir = new File(tmp);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
         String filePath = tmp + "/" + file.getOriginalFilename();
         File newFile = new File(filePath);
         try {
             file.transferTo(newFile);
         } catch (IOException e) {
-            log.error("文件上传失败");
+            log.error("文件上传失败," + e.toString());
             return new ApiResponse(500, "文件上次失败");
         }
         return new ApiResponse(200, "文件上传成功", "filepath: " + filePath);

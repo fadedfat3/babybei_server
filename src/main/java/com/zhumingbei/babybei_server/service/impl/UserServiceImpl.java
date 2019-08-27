@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,7 +22,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUserList() {
-        return userMapper.getList();
+        List<User> users = new ArrayList<>();
+        for (User user : userMapper.getList()) {
+            user.setPassword(null);
+            users.add(user);
+        }
+        return users;
     }
 
     @Override
