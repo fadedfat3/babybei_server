@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,5 +31,13 @@ public class UserController {
     @GetMapping("/me")
     public UserPrincipal info() {
         return UserPrincipal.getUserInfo();
+    }
+
+    @PostMapping("/other")
+    @PreAuthorize("hasAuthority('admin:other:user')")
+    public User otherUser(String name) {
+        User user = userService.findByUsername(name);
+        user.setPassword(null);
+        return user;
     }
 }

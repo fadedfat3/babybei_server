@@ -14,4 +14,12 @@ public class SecurityException extends BaseException {
     public SecurityException(StatusCode statusCode) {
         super(statusCode);
     }
+
+    public SecurityException(int code, String msg, Object data) {
+        super(code, msg, data);
+    }
+
+    public SecurityException(int code, String msg) {
+        this(code, msg, null);
+    }
 }

@@ -1,19 +1,16 @@
 package com.zhumingbei.babybei_server.service.impl;
 
 import com.zhumingbei.babybei_server.common.UserPrincipal;
-import com.zhumingbei.babybei_server.entity.Permission;
 import com.zhumingbei.babybei_server.entity.User;
+import com.zhumingbei.babybei_server.exception.SecurityException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@Slf4j
 @Service
 public class UsersDetailsServiceImpl implements UserDetailsService {
     @Autowired
@@ -22,12 +19,9 @@ public class UsersDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userService.findByUsername(s);
-        String username = userService.findByUsername(s).getUsername();
-        String password = userService.findByUsername(s).getPassword();
-        password = new BCryptPasswordEncoder().encode(password);
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (Permission permission : user.getPermissions()) {
-            authorities.add(new SimpleGrantedAuthority(permission.getExprission()));
+        //can not find user
+        if (user == null) {
+            throw new SecurityException(4000, "用户未注册");
         }
         return UserPrincipal.create(user);
     }

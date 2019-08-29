@@ -1,5 +1,6 @@
 package com.zhumingbei.babybei_server.common;
 
+import cn.hutool.core.util.StrUtil;
 import com.zhumingbei.babybei_server.entity.Permission;
 import com.zhumingbei.babybei_server.entity.Role;
 import com.zhumingbei.babybei_server.entity.User;
@@ -27,16 +28,19 @@ public class UserPrincipal implements UserDetails {
     private String username;
     private String password;
     private Integer lastPasswordChanged;
-    private List<Role> roleList;
+    private List<Role> roles;
+    private List<Permission> permissions;
     private Collection<? extends SimpleGrantedAuthority> authorities;
 
     public static UserPrincipal create(User user) {
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         List<Permission> permissionList = user.getPermissions();
         for (Permission permission : permissionList) {
-            simpleGrantedAuthorities.add(new SimpleGrantedAuthority(permission.getExprission()));
+            if (StrUtil.isNotBlank(permission.getExprission())) {
+                simpleGrantedAuthorities.add(new SimpleGrantedAuthority(permission.getExprission()));
+            }
         }
-        return new UserPrincipal(user.getUserId(), user.getUsername(), user.getPassword(), user.getLastPasswordChanged(), user.getRoles(), simpleGrantedAuthorities);
+        return new UserPrincipal(user.getUserId(), user.getUsername(), user.getPassword(), user.getLastPasswordChanged(), user.getRoles(), user.getPermissions(), simpleGrantedAuthorities);
     }
 
     @Override

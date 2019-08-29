@@ -31,18 +31,24 @@ public class JwtUtil {
     private Long ttl;
     public String createJWT(UserPrincipal user, Boolean rememberMe) {
         Date now = new Date();
+        // 设置过期时间
+        ttl = rememberMe ? jwtConfig.getRemember() : jwtConfig.getTtl();
         JwtBuilder builder = Jwts.builder()
                 .setId(user.getUserId().toString())
                 .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, jwtConfig.getKey())
-                .claim("roles", user.getRoleList())
-                .claim("authorities", user.getAuthorities());
-        // 设置过期时间
-        ttl = rememberMe ? jwtConfig.getRemember() : jwtConfig.getTtl();
+                .claim("roles", user.getRoles())
+                .claim("authorities", user.getAuthorities())
+                .claim("ttl", ttl);
+
 
         String jwt = builder.compact();
-        redisTemplate.opsForValue().set(jwtConfig.getRedisKeyPrefix() + user.getUsername(), jwt, ttl, TimeUnit.SECONDS);
+        if (ttl < 0) {
+            redisTemplate.opsForValue().set(jwtConfig.getRedisKeyPrefix() + user.getUsername(), jwt);
+        } else {
+            redisTemplate.opsForValue().set(jwtConfig.getRedisKeyPrefix() + user.getUsername(), jwt, ttl, TimeUnit.SECONDS);
+        }
         return jwt;
     }
 
@@ -70,7 +76,10 @@ public class JwtUtil {
                 log.error("redisJwt:{}", redisJwt);
                 throw new SecurityException(StatusCode.TOKEN_OUT_OF_CTRL);
             }
-            refreshExpire(key, ttl);
+            ttl = claims.get("ttl", Long.class);
+            if (ttl > 0) {
+                refreshExpire(key, ttl);
+            }
             return claims;
         } catch (ExpiredJwtException e) {
             log.error("Token 已过期");
@@ -92,6 +101,8 @@ public class JwtUtil {
     }
 
     public void refreshExpire(String key, Long second) {
+        log.error("key=" + key);
+        log.error("second=" + second);
         redisTemplate.expire(key, second, TimeUnit.SECONDS);
     }
 
