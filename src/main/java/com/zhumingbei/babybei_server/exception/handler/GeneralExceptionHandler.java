@@ -50,10 +50,6 @@ public class GeneralExceptionHandler {
             return ApiResponse.of(StatusCode.PARAM_NOT_NULL);
             //用户未找到
         } else if (e instanceof InternalAuthenticationServiceException) {
-
-            if (e.getMessage() == "用户未注册") {
-                return ApiResponse.of(4000, e.getMessage());
-            }
             return ApiResponse.of(5000, "用户身份验证失败");
         } else if (e instanceof BadCredentialsException) {
             log.error("【全局异常拦截】BadCredentialsException: 错误信息 {}", e.getMessage());
@@ -65,7 +61,6 @@ public class GeneralExceptionHandler {
             log.error("【全局异常拦截】DataManagerException: 状态码 {}, 异常信息 {}", ((BaseException) e).getCode(), e.getMessage());
             return ApiResponse.ofException((BaseException) e);
         }
-
         log.error("【全局异常拦截】: 异常信息 {} ", e.getMessage());
         return ApiResponse.of(StatusCode.ERROR);
     }

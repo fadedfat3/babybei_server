@@ -4,7 +4,6 @@ import cn.hutool.core.lang.Dict;
 import com.zhumingbei.babybei_server.common.ApiResponse;
 import com.zhumingbei.babybei_server.common.StatusCode;
 import com.zhumingbei.babybei_server.entity.User;
-import com.zhumingbei.babybei_server.exception.SecurityException;
 import com.zhumingbei.babybei_server.service.impl.UserServiceImpl;
 import com.zhumingbei.babybei_server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +62,9 @@ public class AuthController {
     @ResponseBody
     @PostMapping("/logout")
     public ApiResponse logout(HttpServletRequest request) {
-        try {
-            jwtUtil.invalidateJWT(request);
-        } catch (SecurityException e) {
-            return ApiResponse.ofException(e);
-        }
+
+        jwtUtil.invalidateJWT(request);
+
         return ApiResponse.of(StatusCode.LOGOUT);
     }
 

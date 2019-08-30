@@ -72,8 +72,8 @@ public class JwtUtil {
             String redisJwt = (String) redisTemplate.opsForValue().get(key);
 
             if (!redisJwt.equals(jwt)) {
-                log.error("jwt:{}", jwt);
-                log.error("redisJwt:{}", redisJwt);
+                log.debug("jwt:{}", jwt);
+                log.debug("redisJwt:{}", redisJwt);
                 throw new SecurityException(StatusCode.TOKEN_OUT_OF_CTRL);
             }
             ttl = claims.get("ttl", Long.class);
@@ -101,8 +101,8 @@ public class JwtUtil {
     }
 
     public void refreshExpire(String key, Long second) {
-        log.error("key=" + key);
-        log.error("second=" + second);
+        log.debug("key=" + key);
+        log.debug("second=" + second);
         redisTemplate.expire(key, second, TimeUnit.SECONDS);
     }
 

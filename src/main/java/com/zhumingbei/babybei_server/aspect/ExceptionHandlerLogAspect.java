@@ -13,18 +13,19 @@ import org.springframework.stereotype.Component;
 /**
  @author: fadedfate
  */
-public class BaseExceptionLogAspect {
+public class ExceptionHandlerLogAspect {
     @Pointcut("execution(public * com.zhumingbei.babybei_server.exception.handler..*.*(..))")
     public void exceptionLog() {
 
     }
 
     @Around("exceptionLog()")
-    public Object doBefore(ProceedingJoinPoint point) throws Throwable {
+    public Object handler(ProceedingJoinPoint point) throws Throwable {
         log.info("Exception Handler: " + point.getSignature().getDeclaringTypeName() + "." + point.getSignature().getName());
+        log.info("Exception Handler Args: {}", point.getArgs());
         //执行连接点
         Object result = point.proceed();
-        log.info("Exception response: " + result);
+        log.info("Exception Handler result: " + result);
         //返回连接点的结果
         return result;
     }
