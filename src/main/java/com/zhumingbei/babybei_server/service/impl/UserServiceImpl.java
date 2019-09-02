@@ -4,6 +4,7 @@ import com.zhumingbei.babybei_server.entity.User;
 import com.zhumingbei.babybei_server.mapper.UserMapper;
 import com.zhumingbei.babybei_server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,13 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Override
+    @Cacheable(value = "user", key = "#name") //必须使用spel
     public User findByUsername(String name) {
         return userMapper.getUserByName(name);
     }
 
     @Override
+    @Cacheable(value = "user")
     public List<User> getUserList() {
         List<User> users = new ArrayList<>();
         for (User user : userMapper.getList()) {

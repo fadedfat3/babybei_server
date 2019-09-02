@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.zhumingbei.babybei_server.common.StatusCode;
 import com.zhumingbei.babybei_server.common.UserPrincipal;
 import com.zhumingbei.babybei_server.config.JwtConfig;
-import com.zhumingbei.babybei_server.exception.SecurityException;
+import com.zhumingbei.babybei_server.exception.AuthenticationException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,14 +67,14 @@ public class JwtUtil {
             String key = jwtConfig.getRedisKeyPrefix() + username;
             Long expire = redisTemplate.getExpire(key, TimeUnit.SECONDS);
             if (expire == null || expire < 0) {
-                throw new SecurityException(StatusCode.TOKEN_EXPIRED);
+                throw new AuthenticationException(StatusCode.TOKEN_EXPIRED);
             }
             String redisJwt = (String) redisTemplate.opsForValue().get(key);
 
             if (!redisJwt.equals(jwt)) {
                 log.debug("jwt:{}", jwt);
                 log.debug("redisJwt:{}", redisJwt);
-                throw new SecurityException(StatusCode.TOKEN_OUT_OF_CTRL);
+                throw new AuthenticationException(StatusCode.TOKEN_OUT_OF_CTRL);
             }
             ttl = claims.get("ttl", Long.class);
             if (ttl > 0) {
@@ -83,19 +83,19 @@ public class JwtUtil {
             return claims;
         } catch (ExpiredJwtException e) {
             log.error("Token 已过期");
-            throw new SecurityException(StatusCode.TOKEN_EXPIRED);
+            throw new AuthenticationException(StatusCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.error("不支持的 Token");
-            throw new SecurityException(StatusCode.TOKEN_PARSE_ERROR);
+            throw new AuthenticationException(StatusCode.TOKEN_PARSE_ERROR);
         } catch (MalformedJwtException e) {
             log.error("Token 无效");
-            throw new SecurityException(StatusCode.TOKEN_PARSE_ERROR);
+            throw new AuthenticationException(StatusCode.TOKEN_PARSE_ERROR);
         } catch (SignatureException e) {
             log.error("无效的 Token 签名");
-            throw new SecurityException(StatusCode.TOKEN_PARSE_ERROR);
+            throw new AuthenticationException(StatusCode.TOKEN_PARSE_ERROR);
         } catch (IllegalArgumentException e) {
             log.error("Token 参数不存在");
-            throw new SecurityException(StatusCode.TOKEN_PARSE_ERROR);
+            throw new AuthenticationException(StatusCode.TOKEN_PARSE_ERROR);
         }
 
     }
