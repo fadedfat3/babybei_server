@@ -53,9 +53,13 @@ public class AuthController {
     public ApiResponse registry(String username, String password) {
         User user = userService.findByUsername(username);
         if (user != null) {
-            return ApiResponse.of(6000, "用户已存在");
+            return ApiResponse.of(4100, "用户名已被注册");
         }
-        userService.insert(username, password);
+        String roleName = "user";
+        int userID = userService.registry(username, password, roleName);
+        if (userID <= 1) {
+            return ApiResponse.of(500, "insert result ID" + userID);
+        }
         return ApiResponse.ofSuccess("注册成功");
     }
 

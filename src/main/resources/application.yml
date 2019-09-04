@@ -79,6 +79,7 @@ url:
     post:
       - "/api/auth/login"
       - "/login"
+      - "/registry"
     pattern:
       - "/test/*"
 

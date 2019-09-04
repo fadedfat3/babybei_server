@@ -11,5 +11,11 @@ public interface UserMapper {
 
     List<User> getList();
 
-    void insert(String username, String password);
+    int insert(User user);
+
+    void insertUserRole(Integer userID, Integer roleID);
+
+    void updateIsMatched(int isMatched);
+
+    void updatePartnerId(int partnerId);
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhumingbei.babybei_server.mapper.RoleMapper">
+    <insert id="insert">
+        insert into role(role_name) value (#{name})
+    </insert>
+    <resultMap id="RoleMap" type="com.zhumingbei.babybei_server.entity.Role">
+        <id property="id" column="role_id"/>
+        <result property="name" column="role_name"/>
+        <collection property="permissions" ofType="com.zhumingbei.babybei_server.entity.Permission">
+            <id property="id" column="permission_id"/>
+            <result property="name" column="permission_name"/>
+            <result property="exprission" column="exprission"/>
+            <result property="url" column="url"/>
+        </collection>
+    </resultMap>
+    <select id="findRoleByName" resultMap="RoleMap">
+        select role.role_id, role.role_name, permission.permission_id, permission.permission_name, exprission, url
+        from role
+        inner join role_permission on role.role_id = role_permission.role_id
+        inner join permission on permission.permission_id = role_permission.permission_id
+        where role.role_name = #{name}
+    </select>
+</mapper>

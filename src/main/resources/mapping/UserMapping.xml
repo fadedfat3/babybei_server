@@ -2,41 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhumingbei.babybei_server.mapper.UserMapper">
     <resultMap id="UserMap" type="com.zhumingbei.babybei_server.entity.User">
-        <id property="userId" column="user_id"/>
+        <id property="id" column="user_id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
-        <result property="lastPasswordChanged" column="last_password_changed"/>
+        <result property="isMatched" column="is_matched"/>
+        <result property="partnerId" column="partner_id"/>
         <collection property="roles" ofType="com.zhumingbei.babybei_server.entity.Role">
-            <id property="roleId" column="role_id"/>
-            <result property="roleName" column="role_name"/>
-        </collection>
-        <collection property="permissions" ofType="com.zhumingbei.babybei_server.entity.Permission">
-            <id property="permissionId" column="permission_id"/>
-            <result property="permissionName" column="permission_name"/>
-            <result property="exprission" column="exprission"/>
-            <result property="url" column="url"/>
+            <id property="id" column="role_id"/>
+            <result property="name" column="role_name"/>
         </collection>
     </resultMap>
     <select id="getUserByName" resultMap="UserMap">
-        select  user.user_id, username, password, last_password_changed,  role.role_id, role_name, permission.permission_id, permission_name, url, exprission
+        select  user.user_id, username, password, is_matched, partner_id,  role.role_id, role_name
         from user
-        left join user_role on user.user_id = user_role.user_id
-        left join role on role.role_id = user_role.role_id
-        left join role_permission on role_permission.role_id = role.role_id
-        left join permission on permission.permission_id = role_permission.permission_id
+        inner join user_role on user.user_id = user_role.user_id
+        inner join role on role.role_id = user_role.role_id
         where username = #{username};
     </select>
 
     <select id="getList" resultMap="UserMap">
-        select  user.user_id, username, password, last_password_changed,  role.role_id, role_name, permission.permission_id, permission_name, url, exprission
+        select  user.user_id, username, password, is_matched, partner_id  role.role_id, role_name
         from user
         left join user_role on user.user_id = user_role.user_id
         left join role on role.role_id = user_role.role_id
-        left join role_permission on role_permission.role_id = role.role_id
-        left join permission on permission.permission_id = role_permission.permission_id;
     </select>
 
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.zhumingbei.babybei_server.entity.User">
         insert into user(username, password) value (#{username}, #{password});
     </insert>
+
+    <insert id="insertUserRole">
+        insert into user_role(user_id, role_id) value(#{userID}, #{roleID})
+    </insert>
+
+    <update id="updateIsMatched" parameterType="com.zhumingbei.babybei_server.entity.User">
+        update user set is_matched = #{isMatched}, partner_id = #{partnerId} where user_id = #{id}
+    </update>
+    <update id="updatePartnerId" parameterType="com.zhumingbei.babybei_server.entity.User">
+        update user set partner_id = #{partnerId} where user_id = #{id}
+    </update>
 </mapper>

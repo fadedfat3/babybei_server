@@ -13,5 +13,5 @@ public interface UserService {
 
     List<User> getUserList();
 
-    void insert(String username, String password);
+    int insert(User user);
 }

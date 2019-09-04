@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author fadedfate
@@ -19,7 +20,7 @@ public class RbcaAuthorityConfig {
 
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        List<Permission> permissions = userPrincipal.getPermissions();
+        Set<Permission> permissions = userPrincipal.getPermissions();
         List<String> urls = new ArrayList<>();
         for (Permission permission : permissions) {
             String url = permission.getUrl();

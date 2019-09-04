@@ -12,9 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author fadedfate
@@ -24,23 +22,27 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
-    private Long userId;
+    private Integer userId;
     private String username;
     private String password;
-    private Integer lastPasswordChanged;
+    private Integer isMatched;
+    private Integer partnerId;
     private List<Role> roles;
-    private List<Permission> permissions;
+    private Set<Permission> permissions;
     private Collection<? extends SimpleGrantedAuthority> authorities;
 
     public static UserPrincipal create(User user) {
         List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-        List<Permission> permissionList = user.getPermissions();
-        for (Permission permission : permissionList) {
+        Set<Permission> permissions = new HashSet<>();
+        for (Role role : user.getRoles()) {
+            permissions.addAll(role.getPermissions());
+        }
+        for (Permission permission : permissions) {
             if (StrUtil.isNotBlank(permission.getExprission())) {
                 simpleGrantedAuthorities.add(new SimpleGrantedAuthority(permission.getExprission()));
             }
         }
-        return new UserPrincipal(user.getUserId(), user.getUsername(), user.getPassword(), user.getLastPasswordChanged(), user.getRoles(), user.getPermissions(), simpleGrantedAuthorities);
+        return new UserPrincipal(user.getId(), user.getUsername(), user.getPassword(), user.getIsMatched(), user.getPartnerId(), user.getRoles(), permissions, simpleGrantedAuthorities);
     }
 
     @Override
