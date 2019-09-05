@@ -22,6 +22,10 @@ public class RbcaAuthorityConfig {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Set<Permission> permissions = userPrincipal.getPermissions();
         List<String> urls = new ArrayList<>();
+        AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher("/admin");
+        if (!antPathRequestMatcher.matches(request)) {
+            return true;
+        }
         for (Permission permission : permissions) {
             String url = permission.getUrl();
             if (url != null && !url.isEmpty()) {
@@ -29,7 +33,7 @@ public class RbcaAuthorityConfig {
             }
         }
         for (String url : urls) {
-            AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher(url);
+            antPathRequestMatcher = new AntPathRequestMatcher(url);
             if (antPathRequestMatcher.matches(request)) {
                 return true;
             }

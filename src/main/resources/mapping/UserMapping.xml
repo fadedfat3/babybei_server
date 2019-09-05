@@ -21,7 +21,7 @@
     </select>
 
     <select id="getList" resultMap="UserMap">
-        select  user.user_id, username, password, is_matched, partner_id  role.role_id, role_name
+        select  user.user_id, username, password, is_matched, partner_id,  role.role_id, role_name
         from user
         left join user_role on user.user_id = user_role.user_id
         left join role on role.role_id = user_role.role_id
@@ -36,10 +36,13 @@
         insert into user_role(user_id, role_id) value(#{userID}, #{roleID})
     </insert>
 
-    <update id="updateIsMatched" parameterType="com.zhumingbei.babybei_server.entity.User">
-        update user set is_matched = #{isMatched}, partner_id = #{partnerId} where user_id = #{id}
+    <update id="updateIsMatched">
+        update user set is_matched = #{isMatched} where user_id = #{userID}
     </update>
-    <update id="updatePartnerId" parameterType="com.zhumingbei.babybei_server.entity.User">
-        update user set partner_id = #{partnerId} where user_id = #{id}
+    <update id="updatePartnerId">
+        update user set partner_id = #{partnerID} where user_id = #{userID}
+    </update>
+    <update id="match">
+        update user set is_matched = #{isMatched}, partner_id = #{partnerID} where user_id = #{userID}
     </update>
 </mapper>

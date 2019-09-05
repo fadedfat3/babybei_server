@@ -14,4 +14,8 @@ public interface UserService {
     List<User> getUserList();
 
     int insert(User user);
+
+    void match(User user);
+
+    void dismatch(User user);
 }

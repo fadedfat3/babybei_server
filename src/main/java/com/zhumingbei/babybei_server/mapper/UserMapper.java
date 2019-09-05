@@ -15,7 +15,9 @@ public interface UserMapper {
 
     void insertUserRole(Integer userID, Integer roleID);
 
-    void updateIsMatched(int isMatched);
+    void updateIsMatched(int userID, int isMatched);
 
-    void updatePartnerId(int partnerId);
+    void updatePartnerId(int userID, int partnerID);
+
+    void match(int userID, int isMatched, int partnerID);
 }

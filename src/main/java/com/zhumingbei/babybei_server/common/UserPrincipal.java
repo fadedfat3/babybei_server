@@ -80,12 +80,12 @@ public class UserPrincipal implements UserDetails {
         return true;
     }
 
-    public static UserPrincipal getUserInfo() {
+    public static User User() {
         Object userInfo = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userInfo instanceof UserPrincipal) {
             UserPrincipal user = (UserPrincipal) userInfo;
             user.setPassword(null);
-            return user;
+            return new User(user);
         }
         return null;
     }

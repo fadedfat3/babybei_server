@@ -2,8 +2,10 @@ package com.zhumingbei.babybei_server.controller;
 
 import cn.hutool.core.lang.Dict;
 import com.zhumingbei.babybei_server.common.ApiResponse;
+import com.zhumingbei.babybei_server.common.MatchCode;
 import com.zhumingbei.babybei_server.common.StatusCode;
 import com.zhumingbei.babybei_server.entity.User;
+import com.zhumingbei.babybei_server.service.MatchCodeService;
 import com.zhumingbei.babybei_server.service.impl.UserServiceImpl;
 import com.zhumingbei.babybei_server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +13,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Controller
+@RestController
 public class AuthController {
     @Autowired
     private UserServiceImpl userService;
@@ -26,12 +27,8 @@ public class AuthController {
     private JwtUtil jwtUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
-    @GetMapping("/login")
-    public String login() {
-        //User user = userService.getUserByName(username);
-        return "/login";
-    }
-
+    @Autowired
+    private MatchCodeService matchCodeService;
     @PostMapping("/login")
     @ResponseBody
     public ApiResponse login(String username, String password) {
@@ -43,10 +40,6 @@ public class AuthController {
         return ApiResponse.ofSuccess(Dict.create().set("jwt", jwtStr));
     }
 
-    @GetMapping("/registry")
-    public String registry() {
-        return "/registry";
-    }
 
     @PostMapping("/registry")
     @ResponseBody
@@ -60,7 +53,8 @@ public class AuthController {
         if (userID <= 1) {
             return ApiResponse.of(500, "insert result ID" + userID);
         }
-        return ApiResponse.ofSuccess("注册成功");
+        MatchCode matchCode = matchCodeService.refresh(userID);
+        return ApiResponse.ofSuccess("注册成功", Dict.create().set("matchCode", matchCode).set("info", user));
     }
 
     @ResponseBody

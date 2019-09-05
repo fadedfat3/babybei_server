@@ -32,8 +32,8 @@ public class UserController {
 
 
     @GetMapping("/me")
-    public UserPrincipal info() {
-        return UserPrincipal.getUserInfo();
+    public User info() {
+        return UserPrincipal.User();
     }
 
     @PostMapping("/other")

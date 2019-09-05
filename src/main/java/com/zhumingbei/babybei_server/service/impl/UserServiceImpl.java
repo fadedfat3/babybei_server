@@ -25,6 +25,9 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String name) {
 
         User user = userMapper.getUserByName(name);
+        if (user == null) {
+            return null;
+        }
         List<Role> roles = new ArrayList<>();
         for (Role role : user.getRoles()) {
             String roleName = role.getName();
@@ -39,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getUserList() {
         List<User> users = new ArrayList<>();
         for (User user : userMapper.getList()) {
-            user.setPassword("******");
+            user.setPassword(null);
             List<Role> roles = new ArrayList<>();
             for (Role role : user.getRoles()) {
                 roles.add(roleMapper.findRoleByName(role.getName()));
@@ -57,10 +60,6 @@ public class UserServiceImpl implements UserService {
 
         userMapper.insert(user);
         int userID = user.getId();
-        log.info("userID={}", userID);
-        if (userID <= 1) {
-            return userID;
-        }
         for (String roleName : roleNameList) {
             Role role = roleMapper.findRoleByName(roleName);
             userMapper.insertUserRole(userID, role.getId());
@@ -79,8 +78,15 @@ public class UserServiceImpl implements UserService {
         return userMapper.insert(user);
     }
 
-    public boolean match(int partnerId) {
-
+    @Override
+    public void match(User user) {
+        userMapper.match(user.getId(), user.getIsMatched(), user.getPartnerId());
+        userMapper.match(user.getPartnerId(), user.getIsMatched(), user.getId());
     }
 
+    @Override
+    public void dismatch(User user) {
+        userMapper.updateIsMatched(user.getId(), user.getIsMatched());
+        userMapper.updateIsMatched(user.getPartnerId(), user.getIsMatched());
+    }
 }

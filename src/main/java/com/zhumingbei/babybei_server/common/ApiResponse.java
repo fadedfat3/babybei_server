@@ -1,9 +1,11 @@
 package com.zhumingbei.babybei_server.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zhumingbei.babybei_server.exception.BaseException;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse {
     private Integer code;
     private String msg;
