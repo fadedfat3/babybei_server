@@ -11,6 +11,7 @@ import java.util.List;
 public interface UserService {
     User findByUsername(String username);
 
+    User findByID(int id);
     List<User> getUserList();
 
     int insert(User user);

@@ -38,6 +38,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByID(int id) {
+        User user = userMapper.getUserByID(id);
+        if (user == null) {
+            return null;
+        }
+        List<Role> roles = new ArrayList<>();
+        for (Role role : user.getRoles()) {
+            roles.add(roleMapper.findRoleByName(role.getName()));
+        }
+        user.setRoles(roles);
+        return user;
+    }
+
+    @Override
     //@Cacheable(value = "user", unless = "#result == null")
     public List<User> getUserList() {
         List<User> users = new ArrayList<>();

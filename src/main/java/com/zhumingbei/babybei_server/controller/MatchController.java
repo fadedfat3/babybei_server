@@ -45,7 +45,7 @@ public class MatchController {
         return ApiResponse.of(4001, "配对失败");
     }
 
-    @PostMapping("dismatch")
+    @PostMapping("/dismatch")
     public ApiResponse dismatch() {
         User user = UserPrincipal.User();
         if (user.getIsMatched() == 0) {

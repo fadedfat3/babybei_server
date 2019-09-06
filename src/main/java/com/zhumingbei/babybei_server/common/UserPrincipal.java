@@ -81,12 +81,15 @@ public class UserPrincipal implements UserDetails {
     }
 
     public static User User() {
+        //读取数据库最新数据
         Object userInfo = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userInfo instanceof UserPrincipal) {
             UserPrincipal user = (UserPrincipal) userInfo;
             user.setPassword(null);
+
             return new User(user);
         }
         return null;
     }
+
 }

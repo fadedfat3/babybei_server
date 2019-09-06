@@ -27,6 +27,14 @@
         left join role on role.role_id = user_role.role_id
     </select>
 
+    <select id="getUserByID" resultMap="UserMap">
+        select user_id, username, is_matched, partner_id, role.role_id, role_name
+        from user
+        inner join user_role on user.user_id = user_role.user_id
+        inner join role on role.role_id = user_role.role_id
+        where user.user_id = #{id}
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.zhumingbei.babybei_server.entity.User">
         insert into user(username, password) value (#{username}, #{password});

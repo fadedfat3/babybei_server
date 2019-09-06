@@ -22,7 +22,7 @@ public class RbcaAuthorityConfig {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         Set<Permission> permissions = userPrincipal.getPermissions();
         List<String> urls = new ArrayList<>();
-        AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher("/admin");
+        AntPathRequestMatcher antPathRequestMatcher = new AntPathRequestMatcher("/AdminController");
         if (!antPathRequestMatcher.matches(request)) {
             return true;
         }
