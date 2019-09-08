@@ -20,5 +20,8 @@ public interface UserMapper {
 
     void updatePartnerId(int userID, int partnerID);
 
+    void updatePassword(int userID, String password);
+
     void match(int userID, int isMatched, int partnerID);
+    void update(User user);
 }

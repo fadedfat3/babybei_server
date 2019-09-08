@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Dict;
 import com.zhumingbei.babybei_server.common.ApiResponse;
 import com.zhumingbei.babybei_server.common.MatchCode;
 import com.zhumingbei.babybei_server.common.StatusCode;
+import com.zhumingbei.babybei_server.common.UserPrincipal;
 import com.zhumingbei.babybei_server.entity.User;
 import com.zhumingbei.babybei_server.service.MatchCodeService;
 import com.zhumingbei.babybei_server.service.impl.UserServiceImpl;
@@ -13,13 +14,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
     @Autowired
     private UserServiceImpl userService;
@@ -29,6 +30,9 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private MatchCodeService matchCodeService;
+
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @PostMapping("/login")
     @ResponseBody
     public ApiResponse login(String username, String password) {
@@ -65,6 +69,22 @@ public class AuthController {
 
         return ApiResponse.of(StatusCode.LOGOUT);
     }
+    private boolean validPassword(String old){
+        User user = UserPrincipal.User();
+        String password = userService.findByID(user.getId()).getPassword();
+        return passwordEncoder.matches(old, password);
+    }
+    @PostMapping
+    public ApiResponse resetPassword(@RequestParam("old") String old, @RequestParam("new") String newPassword){
+        if (validPassword(old)) {
+            User user = UserPrincipal.User();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userService.update(user);
+            return ApiResponse.ofSuccess("重置密码成功");
+        }
+        return ApiResponse.of(4000, "密码错误");
+    }
+
 
 
 }

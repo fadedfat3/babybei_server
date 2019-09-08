@@ -103,4 +103,14 @@ public class UserServiceImpl implements UserService {
         userMapper.updateIsMatched(user.getId(), user.getIsMatched());
         userMapper.updateIsMatched(user.getPartnerId(), user.getIsMatched());
     }
+
+    @Override
+    public String getPassword(int id){
+        return userMapper.getUserByID(id).getPassword();
+    }
+
+    @Override
+    public void update(User user){
+        userMapper.update(user);
+    }
 }

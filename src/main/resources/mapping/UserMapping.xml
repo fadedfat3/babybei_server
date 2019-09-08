@@ -28,13 +28,12 @@
     </select>
 
     <select id="getUserByID" resultMap="UserMap">
-        select user_id, username, is_matched, partner_id, role.role_id, role_name
+        select user_id, username, password, is_matched, partner_id, role.role_id, role_name
         from user
         inner join user_role on user.user_id = user_role.user_id
         inner join role on role.role_id = user_role.role_id
         where user.user_id = #{id}
     </select>
-
     <insert id="insert" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.zhumingbei.babybei_server.entity.User">
         insert into user(username, password) value (#{username}, #{password});
@@ -52,5 +51,12 @@
     </update>
     <update id="match">
         update user set is_matched = #{isMatched}, partner_id = #{partnerID} where user_id = #{userID}
+    </update>
+    <update id="updatePassword">
+        update user set password = #{password} where user_id = #{userID}
+    </update>
+
+    <update id="update" parameterType="com.zhumingbei.babybei_server.entity.User">
+        update user set username = #{username}, password = #{password}, is_matched = {#isMatched}, partner_id = #{partnerId} where user_id = #{id}
     </update>
 </mapper>

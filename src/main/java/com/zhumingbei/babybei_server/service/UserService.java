@@ -19,4 +19,7 @@ public interface UserService {
     void match(User user);
 
     void dismatch(User user);
+
+    String getPassword(int id);
+    void update(User user);
 }
