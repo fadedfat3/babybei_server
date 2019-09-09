@@ -85,8 +85,6 @@ public class UserPrincipal implements UserDetails {
         Object userInfo = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (userInfo instanceof UserPrincipal) {
             UserPrincipal user = (UserPrincipal) userInfo;
-            user.setPassword(null);
-
             return new User(user);
         }
         return null;

@@ -77,9 +77,8 @@ url:
     get:
       - "/api/auth/login"
     post:
-      - "/api/auth/login"
-      - "/login"
-      - "/registry"
+      - "/auth/login"
+      - "/auth/registry"
     pattern:
       - "/test/*"
 

@@ -74,12 +74,14 @@ public class AuthController {
         String password = userService.findByID(user.getId()).getPassword();
         return passwordEncoder.matches(old, password);
     }
-    @PostMapping
+
+    @PostMapping("/reset")
     public ApiResponse resetPassword(@RequestParam("old") String old, @RequestParam("new") String newPassword){
         if (validPassword(old)) {
             User user = UserPrincipal.User();
             user.setPassword(passwordEncoder.encode(newPassword));
             userService.update(user);
+            jwtUtil.invalidateJWT(user.getUsername());
             return ApiResponse.ofSuccess("重置密码成功");
         }
         return ApiResponse.of(4000, "密码错误");

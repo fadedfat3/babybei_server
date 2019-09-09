@@ -28,7 +28,7 @@
     </select>
 
     <select id="getUserByID" resultMap="UserMap">
-        select user_id, username, password, is_matched, partner_id, role.role_id, role_name
+        select user.user_id, username, password, is_matched, partner_id, role.role_id, role_name
         from user
         inner join user_role on user.user_id = user_role.user_id
         inner join role on role.role_id = user_role.role_id
@@ -57,6 +57,13 @@
     </update>
 
     <update id="update" parameterType="com.zhumingbei.babybei_server.entity.User">
-        update user set username = #{username}, password = #{password}, is_matched = {#isMatched}, partner_id = #{partnerId} where user_id = #{id}
+        update user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="isMatched != null">is_matched = #{isMatched},</if>
+            <if test="partnerId != null">partner_id = #{partnerId},</if>
+        </trim>
+        where user_id = #{id}
     </update>
 </mapper>

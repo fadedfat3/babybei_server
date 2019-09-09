@@ -118,6 +118,10 @@ public class JwtUtil {
         redisTemplate.delete(jwtConfig.getRedisKeyPrefix() + username);
     }
 
+    public void invalidateJWT(String username) {
+        redisTemplate.delete(jwtConfig.getRedisKeyPrefix() + username);
+    }
+
     /**
      * 根据 jwt 获取用户名
      *

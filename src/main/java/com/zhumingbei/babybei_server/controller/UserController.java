@@ -7,7 +7,6 @@ import com.zhumingbei.babybei_server.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +25,12 @@ public class UserController {
 
     @GetMapping("/me")
     public User info() {
-        return UserPrincipal.User();
+        User user = UserPrincipal.User();
+        user.setPassword(null);
+        return user;
     }
 
     @PostMapping("/other")
-    @PreAuthorize("hasAuthority('admin:other:user')")
     public User otherUser(String name) {
         if (name.equals("AdminController-test")) {
             //直接抛出异常，系统打印异常追踪信息，handler进行后续处理
