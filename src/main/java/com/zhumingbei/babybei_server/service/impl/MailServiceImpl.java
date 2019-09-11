@@ -44,6 +44,7 @@ public class MailServiceImpl implements MailService {
         mailSender.send(message);
     }
 
+    @Override
     public void sendSimpleMail(String to, String subject, String content, String... cc) throws MessagingException {
         sendMail(to, subject, content, false, "", cc);
     }

@@ -17,6 +17,8 @@ public class User implements Serializable {
     private Integer id;
     private String username;
     private String password;
+    private String email;
+    private Integer isDisable;
     private Integer isMatched;
     private Integer partnerId;
     private List<Role> roles;

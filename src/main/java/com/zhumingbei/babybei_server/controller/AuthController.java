@@ -6,6 +6,7 @@ import com.zhumingbei.babybei_server.common.MatchCode;
 import com.zhumingbei.babybei_server.common.StatusCode;
 import com.zhumingbei.babybei_server.common.UserPrincipal;
 import com.zhumingbei.babybei_server.entity.User;
+import com.zhumingbei.babybei_server.service.MailService;
 import com.zhumingbei.babybei_server.service.MatchCodeService;
 import com.zhumingbei.babybei_server.service.impl.UserServiceImpl;
 import com.zhumingbei.babybei_server.util.JwtUtil;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthController {
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private MailService mailService;
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
@@ -87,6 +91,25 @@ public class AuthController {
         return ApiResponse.of(4000, "密码错误");
     }
 
+    private void sendValidateEmail(String email) throws MessagingException {
+        String jwt = jwtUtil.createJWTByEmail(email);
+        String url = "http://localhost:8888/auth/emailValidate?code=" + jwt;
+        mailService.sendSimpleMail(email, "验证你的邮箱", "你的邮箱验证地址" + url);
+    }
 
+    @PostMapping("/email/update")
+    public ApiResponse email(@RequestParam("email") String email) throws MessagingException {
+        sendValidateEmail(email);
+        return ApiResponse.ofSuccess("验证地址邮件已发送到你的邮箱，请查收并点击验证地址");
+    }
+
+    @GetMapping("/email/validate")
+    public ApiResponse validateEmail(@RequestParam("code") String code) {
+        String email = jwtUtil.getEmailByJWT(code);
+        if (email != null) {
+            User user = UserPrincipal.User();
+            user.set
+        }
+    }
 
 }

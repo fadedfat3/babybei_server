@@ -20,4 +20,6 @@ public interface MailService {
      * @throws MessagingException 邮件发送异常
      */
     void sendMail(String to, String subject, String content, boolean html, String filepath, String... cc) throws MessagingException;
+
+    void sendSimpleMail(String to, String subject, String content, String... cc) throws MessagingException;
 }

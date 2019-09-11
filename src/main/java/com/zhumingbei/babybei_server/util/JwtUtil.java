@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,6 +30,19 @@ public class JwtUtil {
     private RedisTemplate<String, Object> redisTemplate;
 
     private Long ttl;
+
+    public String createJWTByEmail(String email) {
+        Date now = new Date();
+        JwtBuilder builder = Jwts.builder()
+                .setId(email)
+                .setSubject(email)
+                .setIssuedAt(now)
+                .signWith(SignatureAlgorithm.HS256, jwtConfig.getKey())
+                .setExpiration(new Date(now.getTime() + 15 * 60 * 1000));
+        String jwt = builder.compact();
+        return jwt;
+    }
+
     public String createJWT(UserPrincipal user, Boolean rememberMe) {
         Date now = new Date();
         // 设置过期时间
@@ -100,6 +114,19 @@ public class JwtUtil {
 
     }
 
+    public String getEmailByJWT(String jwt) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(jwtConfig.getKey())
+                    .parseClaimsJws(jwt)
+                    .getBody();
+            String email = claims.getSubject();
+            return email;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public void refreshExpire(String key, Long second) {
         log.debug("key=" + key);
         log.debug("second=" + second);
@@ -146,4 +173,20 @@ public class JwtUtil {
         }
         return null;
     }
+
+    public boolean validateEmail(HttpServletRequest request) {
+
+        Map<String, String[]> map = request.getParameterMap();
+        String[] values = map.getOrDefault("code", null);
+        if (values != null) {
+            String jwt = values[0];
+            if (getEmailByJWT(jwt) != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }

@@ -52,6 +52,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        if (isEmailValidateRequest(request)) {
+
+            if (jwtUtil.validateEmail(request)) {
+                ResponseUtil.renderJson(response, StatusCode.OK);
+            } else {
+                ResponseUtil.renderJson(response, StatusCode.ERROR);
+            }
+            return;
+        }
+
         String jwtStr = jwtUtil.getJwtFromRequest(request);
 
         if (StrUtil.isNotBlank(jwtStr)) {
@@ -123,6 +133,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
+        return false;
+    }
+
+    public boolean isEmailValidateRequest(HttpServletRequest request) {
+
+        AntPathRequestMatcher matcher = new AntPathRequestMatcher("/auth/emailValidate", "GET");
+        if (matcher.matches(request)) {
+            return true;
+        }
         return false;
     }
 

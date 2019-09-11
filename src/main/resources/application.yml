@@ -12,10 +12,10 @@ spring:
     max-conn-lifetime-millis: 3600000
 
   mail:
-    host: smtp.yeah.net
-    port: 994
-    username: hutool@yeah.net
-    password: q1w2e3
+    host: smtp.gmail.com
+    port: 465
+    username: fan.jack.you@gmail.com
+    password: Youfan8596.
     protocol: smtp
     test-connection: true
     default-encoding: UTF-8
@@ -24,7 +24,8 @@ spring:
       mail.smtp.starttls.enable: true
       mail.smtp.starttls.required: true
       mail.smtp.ssl.enable: true
-      mail.display.sendmail: xkcoding
+      mail.display.sendmail: noreply@babybei.com
+      mail.display.sendname: BBB
   task:
     scheduling:
       pool:
