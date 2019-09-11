@@ -53,11 +53,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (isEmailValidateRequest(request)) {
+            try {
+                String username = jwtUtil.getUsernameFromEmailRequest(request);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            if (jwtUtil.validateEmail(request)) {
-                ResponseUtil.renderJson(response, StatusCode.OK);
-            } else {
-                ResponseUtil.renderJson(response, StatusCode.ERROR);
+                SecurityContextHolder.getContext()
+                        .setAuthentication(authentication);
+                filterChain.doFilter(request, response);
+            }catch (BaseException e){
+                ResponseUtil.renderJson(response, e);
             }
             return;
         }
@@ -138,7 +144,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public boolean isEmailValidateRequest(HttpServletRequest request) {
 
-        AntPathRequestMatcher matcher = new AntPathRequestMatcher("/auth/emailValidate", "GET");
+        AntPathRequestMatcher matcher = new AntPathRequestMatcher("/auth/email/validate", "GET");
         if (matcher.matches(request)) {
             return true;
         }

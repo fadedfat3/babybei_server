@@ -24,6 +24,6 @@ public class User implements Serializable {
     private List<Role> roles;
 
     public User(UserPrincipal user) {
-        this(user.getUserId(), user.getUsername(), null, user.getIsMatched(), user.getPartnerId(), user.getRoles());
+        this(user.getUserId(), user.getUsername(), null, user.getEmail(),user.getIsDisable(), user.getIsMatched(), user.getPartnerId(), user.getRoles());
     }
 }

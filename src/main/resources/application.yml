@@ -12,10 +12,10 @@ spring:
     max-conn-lifetime-millis: 3600000
 
   mail:
-    host: smtp.gmail.com
+    host: smtp.163.com
     port: 465
-    username: fan.jack.you@gmail.com
-    password: Youfan8596.
+    username: 13212792230@163.com
+    password: 163email
     protocol: smtp
     test-connection: true
     default-encoding: UTF-8

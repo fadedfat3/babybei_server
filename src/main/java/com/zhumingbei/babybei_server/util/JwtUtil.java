@@ -31,13 +31,14 @@ public class JwtUtil {
 
     private Long ttl;
 
-    public String createJWTByEmail(String email) {
+    public String createJWTByEmail(String username, String email) {
         Date now = new Date();
         JwtBuilder builder = Jwts.builder()
-                .setId(email)
-                .setSubject(email)
+                .setId(username)
+                .setSubject(username)
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, jwtConfig.getKey())
+                .claim("email", email)
                 .setExpiration(new Date(now.getTime() + 15 * 60 * 1000));
         String jwt = builder.compact();
         return jwt;
@@ -114,17 +115,24 @@ public class JwtUtil {
 
     }
 
-    public String getEmailByJWT(String jwt) {
+    public Claims parseEmailJWT(String jwt) {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(jwtConfig.getKey())
                     .parseClaimsJws(jwt)
                     .getBody();
-            String email = claims.getSubject();
-            return email;
+            return claims;
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public String getEmailByJWT(String jwt){
+        Claims claims = parseEmailJWT(jwt);
+        if(claims != null){
+            return claims.get("email", String.class);
+        }
+        return null;
     }
 
     public void refreshExpire(String key, Long second) {
@@ -160,6 +168,14 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
+    public String getUsernameFromEmailJWT(String jwt){
+        Claims claims =parseEmailJWT(jwt);
+        if(claims != null){
+            return claims.getSubject();
+        }
+        return null;
+    }
+
     /**
      * 从 request 的 header 中获取 JWT
      *
@@ -174,18 +190,32 @@ public class JwtUtil {
         return null;
     }
 
-    public boolean validateEmail(HttpServletRequest request) {
+    public String getJWTFromEmailRequest(HttpServletRequest request) {
 
         Map<String, String[]> map = request.getParameterMap();
         String[] values = map.getOrDefault("code", null);
         if (values != null) {
             String jwt = values[0];
-            if (getEmailByJWT(jwt) != null) {
-                return true;
-            }
+            return jwt;
         }
 
-        return false;
+        return null;
+    }
+
+    public String getUsernameFromEmailRequest(HttpServletRequest request){
+        String jwt = getJWTFromEmailRequest(request);
+        if (jwt != null) {
+            return getUsernameFromEmailJWT(jwt);
+        }
+        return null;
+    }
+
+    public String getEmailFromEmailRequest(HttpServletRequest request){
+        String jwt = getJWTFromEmailRequest(request);
+        if (jwt != null) {
+            return getEmailByJWT(jwt);
+        }
+        return null;
     }
 
 

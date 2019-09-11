@@ -7,13 +7,15 @@
         <result property="password" column="password"/>
         <result property="isMatched" column="is_matched"/>
         <result property="partnerId" column="partner_id"/>
+        <result property="email" column="email"/>
+        <result property="isDisable" column="is_disable"/>
         <collection property="roles" ofType="com.zhumingbei.babybei_server.entity.Role">
             <id property="id" column="role_id"/>
             <result property="name" column="role_name"/>
         </collection>
     </resultMap>
     <select id="getUserByName" resultMap="UserMap">
-        select  user.user_id, username, password, is_matched, partner_id,  role.role_id, role_name
+        select  user.user_id, username, password, is_matched, partner_id, email, is_disable, role.role_id, role_name
         from user
         inner join user_role on user.user_id = user_role.user_id
         inner join role on role.role_id = user_role.role_id
@@ -21,14 +23,14 @@
     </select>
 
     <select id="getList" resultMap="UserMap">
-        select  user.user_id, username, password, is_matched, partner_id,  role.role_id, role_name
+        select  user.user_id, username, password, is_matched, partner_id, email, is_disable, role.role_id, role_name
         from user
         left join user_role on user.user_id = user_role.user_id
         left join role on role.role_id = user_role.role_id
     </select>
 
     <select id="getUserByID" resultMap="UserMap">
-        select user.user_id, username, password, is_matched, partner_id, role.role_id, role_name
+        select user.user_id, username, password, is_matched, partner_id, email, is_disable, role.role_id, role_name
         from user
         inner join user_role on user.user_id = user_role.user_id
         inner join role on role.role_id = user_role.role_id
@@ -63,6 +65,8 @@
             <if test="password != null">password = #{password},</if>
             <if test="isMatched != null">is_matched = #{isMatched},</if>
             <if test="partnerId != null">partner_id = #{partnerId},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
         </trim>
         where user_id = #{id}
     </update>

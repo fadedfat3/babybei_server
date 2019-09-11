@@ -27,6 +27,8 @@ public class UserPrincipal implements UserDetails {
     private String password;
     private Integer isMatched;
     private Integer partnerId;
+    private String email;
+    private Integer isDisable;
     private List<Role> roles;
     private Set<Permission> permissions;
     private Collection<? extends SimpleGrantedAuthority> authorities;
@@ -42,7 +44,7 @@ public class UserPrincipal implements UserDetails {
                 simpleGrantedAuthorities.add(new SimpleGrantedAuthority(permission.getExprission()));
             }
         }
-        return new UserPrincipal(user.getId(), user.getUsername(), user.getPassword(), user.getIsMatched(), user.getPartnerId(), user.getRoles(), permissions, simpleGrantedAuthorities);
+        return new UserPrincipal(user.getId(), user.getUsername(), user.getPassword(), user.getIsMatched(), user.getPartnerId(), user.getEmail(), user.getIsDisable(), user.getRoles(), permissions, simpleGrantedAuthorities);
     }
 
     @Override

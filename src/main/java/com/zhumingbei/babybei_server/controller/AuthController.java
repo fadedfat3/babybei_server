@@ -91,15 +91,16 @@ public class AuthController {
         return ApiResponse.of(4000, "密码错误");
     }
 
-    private void sendValidateEmail(String email) throws MessagingException {
-        String jwt = jwtUtil.createJWTByEmail(email);
-        String url = "http://localhost:8888/auth/emailValidate?code=" + jwt;
+    private void sendValidateEmail(String username, String email) throws MessagingException {
+        String jwt = jwtUtil.createJWTByEmail(username, email);
+        String url = "http://localhost:8888/auth/email/validate?code=" + jwt;
         mailService.sendSimpleMail(email, "验证你的邮箱", "你的邮箱验证地址" + url);
     }
 
     @PostMapping("/email/update")
     public ApiResponse email(@RequestParam("email") String email) throws MessagingException {
-        sendValidateEmail(email);
+        User user = UserPrincipal.User();
+        sendValidateEmail(user.getUsername(), email);
         return ApiResponse.ofSuccess("验证地址邮件已发送到你的邮箱，请查收并点击验证地址");
     }
 
@@ -108,8 +109,11 @@ public class AuthController {
         String email = jwtUtil.getEmailByJWT(code);
         if (email != null) {
             User user = UserPrincipal.User();
-            user.set
+            user.setEmail(email);
+            userService.update(user);
+            return ApiResponse.ofSuccess("邮箱验证成功");
         }
+        return ApiResponse.of(4002, "邮箱验证失败，请重试");
     }
 
 }
